@@ -69,10 +69,10 @@ Map<String,dynamic> result = await CafebazaarFlutter.launchPurchaseFlow(
  // after pay you get some data from Cafebazaar, if you get response code -1005 the payment is canceled by the user and  if get code 0  the payment is Success
 
 ```
-sku : your product id on CafeBazaar
-consumption : if your product is not a subscriber type you must consume it, For product consumption, set the consumption to true
-consumption : زمانی که محصول شما از نوع اشتراکی نباشد و از نوع مصرفی می باشد  باید ان را مصرف کنید تا در خرید ها بعدی کاربر بتواند ان را خریداری کند بجت مصرف یک محصول consumption را به صورت true تنظیم کنید
-payload : The `developerPayload` String is used to specify any additional arguments that you want Bazaar to send back along with the purchase information.
+`sku` : your product id on CafeBazaar
+`consumption` : if your product is not a subscriber type you must consume it, For product consumption, set the consumption to true
+`consumption` : زمانی که محصول شما از نوع اشتراکی نباشد و از نوع مصرفی می باشد  باید ان را مصرف کنید تا در خرید ها بعدی کاربر بتواند ان را خریداری کند بجت مصرف یک محصول consumption را به صورت true تنظیم کنید
+`payload` : The `developerPayload` String is used to specify any additional arguments that you want Bazaar to send back along with the purchase information.
 
 
 
