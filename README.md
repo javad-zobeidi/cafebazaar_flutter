@@ -1,6 +1,6 @@
 # cafebazaar_flutter
 
-CafeBazaar In-App Billing Plugin for flutter
+CafeBazaar In-App Billing package for flutter this package is just for android applications and not work on ios
 
 This plugin is just for Android applications
 
