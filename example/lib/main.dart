@@ -12,7 +12,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
 
   @override
   void initState() {
@@ -26,7 +25,7 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     bool result = await CafebazaarFlutter.initPay(
         rsaKey:
-            "MIHNMA0GCSqGSIb3DQEBAQUAA4G7ADCBtwKBrwCnUMP0iJ21ntw4Z3LkUpcoatrGyc/08dcRS5OnU6iTHLcU76xc1Lp1tAkSPBE79JOQ6IwEwwTqPTe8Le965bZlAMT8+0Fc177zr83rXpqioITzJpSzETA3+HpdMVmGWyUR87QbuUtBYBl01u90KtON9X2KzVM0YN8hn0dR/GNtF+K1tjLaqGjb1gGNVG6CrxH4mQKRzqWUU5YFogxhggRmwZdJ5U/2DTGdNydVjHsCAwEAAQ==");
+            "Yor RSA Key");
     print("_bazzar_bazzar_bazzar $result");
 
 
@@ -35,10 +34,6 @@ class _MyAppState extends State<MyApp> {
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
     if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
   }
 
   @override
@@ -52,20 +47,27 @@ class _MyAppState extends State<MyApp> {
           children: <Widget>[
             Center(
               child: RaisedButton(
-                  child: Text("wm2"),
+                  child: Text("PayFirst"),
                   onPressed: () async{
                     Map<String,dynamic> result = await CafebazaarFlutter.launchPurchaseFlow(
-                        sku: "wm2", consumption: false);
+                        sku: "PayFirst", consumption: false,payload: "bGoa+V7g/yqDXvKRqq+JTFn4uQZbPiQJo4pf9RzJ");
                     print("resultresult $result");
+                    CafebazaarFlutter.verifyDeveloperPayload(payload: "bGoa+V7g/yqDXvKRqq+JTFn4uQZbPiQJo4pf9RzJ").then((res){
+                     print(res);
+                   });
+
                   }),
             ),
             Center(
               child: RaisedButton(
-                  child: Text("ww"),
+                  child: Text("PaySecond"),
                   onPressed: () async{
-                    Map<String,dynamic> result = await CafebazaarFlutter.getPurchase(
-                        sku: "wm2",);
+                    Map<String,dynamic> result = await CafebazaarFlutter.launchPurchaseFlow(
+                        sku: "PaySecond", consumption: true,payload: "yqDXvKRqq+JTFn4uQZbPiQJo4pf9RzJ");
                     print("resultresult $result");
+                    CafebazaarFlutter.verifyDeveloperPayload(payload: "yqDXvKRqq+JTFn4uQZbPiQJo4pf9RzJ").then((res){
+                      print(res);
+                    });
                   }),
             ),
           ],

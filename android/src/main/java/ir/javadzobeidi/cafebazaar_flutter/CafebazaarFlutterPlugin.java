@@ -21,9 +21,7 @@ import ir.javadzobeidi.cafebazaar_flutter.util.Inventory;
 import ir.javadzobeidi.cafebazaar_flutter.util.Purchase;
 
 
-/**
- * CafebazaarFlutterPlugin
- */
+
 
 public class CafebazaarFlutterPlugin implements MethodChannel.MethodCallHandler {
 
@@ -101,22 +99,21 @@ public class CafebazaarFlutterPlugin implements MethodChannel.MethodCallHandler 
                 onDestroy();
                 break;
             case "launchPurchaseFlow":
-                 sku = call.argument("productKey");
-                 payload = call.argument("payload");
+                sku = call.argument("productKey");
+                payload = call.argument("payload");
                 boolean consumption = call.<Boolean>argument("consumption");
                 launchPurchaseFlow(sku, payload, consumption);
                 break;
             case "getPurchase":
-                 sku = call.argument("sku");
+                sku = call.argument("sku");
                 getPurchase(sku);
                 break;
             case "queryInventoryAsync":
-                 sku = call.argument("sku");
+                sku = call.argument("sku");
                 queryInventoryAsync(sku);
                 break;
             case "verifyDeveloperPayload":
-                 payload = call.argument("payload");
-                verifyDeveloperPayload(payload);
+                verifyDeveloperPayload();
                 break;
             default:
                 result.notImplemented();
@@ -156,12 +153,12 @@ public class CafebazaarFlutterPlugin implements MethodChannel.MethodCallHandler 
     private void initPay(String rsaKey, boolean debugMode, final MethodChannel.Result methodResult) {
         mHelper = new IabHelper(activity, rsaKey);
         mHelper.enableDebugLogging(debugMode);
-        Log.d(TAG, "Starting setup.");
+        // Log.d(TAG, "Starting setup.");
         mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
             public void onIabSetupFinished(IabResult result) {
-                Log.d(TAG, "Setup finished.");
+                // Log.d(TAG, "Setup finished.");
                 if (!result.isSuccess()) {
-                    Log.d(TAG, "Problem setting up In-app Billing: " + result);
+                    //   Log.d(TAG, "Problem setting up In-app Billing: " + result);
                     methodResult.error("Setup finished Error", "Problem setting up In-app Billing: " + result, null);
                 }
                 methodResult.success(true);
@@ -174,47 +171,51 @@ public class CafebazaarFlutterPlugin implements MethodChannel.MethodCallHandler 
         mHelper = null;
     }
 
-    IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+   private IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
         public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
             if (mHelper == null) return;
-            Log.d(TAG, "Query inventory finished.");
+            // Log.d(TAG, "Query inventory finished.");
             if (result.isFailure()) {
-                Log.d(TAG, "Failed to query inventory: " + result);
+                // Log.d(TAG, "Failed to query inventory: " + result);
                 pendingResult.error("Inventory Listener Error", "Failed to query inventory: " + result, null);
                 return;
             }
-            pendingResult.success(inventory.getSkuDetails(SKU)+"");
-            Log.d(TAG, "Initial inventory query finished; enabling main UI.");
+            pendingResult.success(inventory.getSkuDetails(SKU) + "");
+            // Log.d(TAG, "Initial inventory query finished; enabling main UI.");
         }
     };
 
-    private void queryInventoryAsync(String sku){
+    private void queryInventoryAsync(String sku) {
         List<String> additionalSkuList = new ArrayList<>();
         additionalSkuList.add(sku);
         additionalSkuList.add("ww");
-        SKU =sku;
-        mHelper.queryInventoryAsync(true,additionalSkuList,mGotInventoryListener);
+        SKU = sku;
+        mHelper.queryInventoryAsync(true, additionalSkuList, mGotInventoryListener);
     }
 
     private IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
         public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+            if (mHelper == null) return;
             JSONObject obj = new JSONObject();
             try {
                 if (result.isFailure()) {
                     obj.put("isFailure", result.isFailure());
                     obj.put("response", result.getResponse());
                     obj.put("message", result.getMessage());
+                    obj.put("purchase", null);
                     pendingResult.success(obj.toString());
                     return;
                 }
                 obj.put("isSuccess", result.isSuccess());
                 obj.put("response", result.getResponse());
                 obj.put("message", result.getMessage());
+                obj.put("purchase", purchase.getOriginalJson());
+                payLoad = purchase.getDeveloperPayload();
                 pendingResult.success(obj.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            Log.d(TAG, "Success purchasing: " + result);
+            // Log.d(TAG, "Success purchasing: " + result);
 
             if (consumption)
                 mHelper.consumeAsync(purchase, mConsumeFinishedListener);
@@ -225,16 +226,14 @@ public class CafebazaarFlutterPlugin implements MethodChannel.MethodCallHandler 
     // Called when consumption is complete
     private IabHelper.OnConsumeFinishedListener mConsumeFinishedListener = new IabHelper.OnConsumeFinishedListener() {
         public void onConsumeFinished(Purchase purchase, IabResult result) {
-            Log.d(TAG, "Consumption finished. Purchase: " + purchase + ", result: " + result);
-
+            // Log.d(TAG, "Consumption finished. Purchase: " + purchase + ", result: " + result);
             if (mHelper == null) return;
-
             if (result.isSuccess()) {
-                Log.d(TAG, "Consumption successful. Provisioning.");
+                //  Log.d(TAG, "Consumption successful. Provisioning.");
             } else {
-                Log.d(TAG, "Error while consuming: " + result);
+                //   Log.d(TAG, "Error while consuming: " + result);
             }
-            Log.d(TAG, "End consumption flow.");
+            //  Log.d(TAG, "End consumption flow.");
         }
     };
 
@@ -256,34 +255,28 @@ public class CafebazaarFlutterPlugin implements MethodChannel.MethodCallHandler 
 
 
     private void activityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
+        // Log.d(TAG, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
         if (mHelper == null) return;
         // Pass on the activity result to the helper for handling
         if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
-            Log.d(TAG, "onActivityResult " + data);
+            // Log.d(TAG, "onActivityResult " + data);
         } else {
-            Log.d(TAG, "onActivityResult handled by IABUtil." + data);
+            // Log.d(TAG, "onActivityResult handled by IABUtil." + data);
         }
-
-
     }
 
 
     private void launchPurchaseFlow(String productKey, String payload, boolean consumption) {
         Log.d(TAG, "launchPurchaseFlow");
         SKU = productKey;
-        payLoad = payload;
         this.consumption = consumption;
         mHelper.launchPurchaseFlow(activity, productKey, RC_REQUEST,
                 mPurchaseFinishedListener, payload);
     }
 
 
-    private void verifyDeveloperPayload(String payload) {
-            if (payload.equalsIgnoreCase(payLoad))
-                pendingResult.success("true");
-            else
-                pendingResult.success("false");
+    private void verifyDeveloperPayload() {
+        pendingResult.success(payLoad);
     }
 
 }

@@ -1,8 +1,8 @@
 name: cafebazaar_flutter
-description: A new Flutter plugin  for Cafebazaar
-version: 0.0.1
-author:
-homepage:
+description: CafeBazaar In-App Billing Plugin for flutter
+version: 0.1.0
+author: https://Javadzobeidi.ir <j.zobeidi89@gmail.com>
+homepage: https://github.com/irdeveloper89/cafebazaar_flutter
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

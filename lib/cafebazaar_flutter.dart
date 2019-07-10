@@ -75,9 +75,9 @@ class CafebazaarFlutter {
 
   static Future<bool> verifyDeveloperPayload({@required String payload}) async {
     Map<String, dynamic> args = <String, dynamic>{};
-    args.putIfAbsent("payload", () => payload);
-    dynamic result =
+    String result =
         await _channel.invokeMethod("verifyDeveloperPayload", args);
-    return result as bool;
+    print(result);
+    return result==payload;
   }
 }
