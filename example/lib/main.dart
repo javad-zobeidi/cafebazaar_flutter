@@ -63,8 +63,8 @@ class _MyAppState extends State<MyApp> {
               child: RaisedButton(
                   child: Text("ww"),
                   onPressed: () async{
-                    Map<String,dynamic> result = await CafebazaarFlutter.launchPurchaseFlow(
-                        sku: "ww", consumption: false);
+                    Map<String,dynamic> result = await CafebazaarFlutter.getPurchase(
+                        sku: "wm2",);
                     print("resultresult $result");
                   }),
             ),

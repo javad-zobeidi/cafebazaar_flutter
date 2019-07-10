@@ -80,7 +80,7 @@ payload : The `developerPayload` String is used to specify any additional argume
 
 To get Purchase details use below code
 ```dart
-Map<String,dynamic> result = CafebazaarFlutter.showCafebazzarLogin(sku:"your product sku") // you can find sku(product id) in your application in-app section
+Map<String,dynamic> result = CafebazaarFlutter.getPurchase(sku:"your product sku") // you can find sku(product id) in your application in-app section
 // you get the payment details if you consumption the product result is null
 ```
 Result
