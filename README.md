@@ -22,7 +22,7 @@ Adding the com.farsitel.bazaar.permission.PAY_THROUGH_BAZAAR permission to your 
 import 'package:cafebazaar_flutter/cafebazaar_flutter.dart';
 ```
 
-** All method be static and don't need to initialize any class
+* All method be static and don't need to initialize any class
 
 
 ### To show application page in cafeBazaar use this code(نمایش صفحه نرم افزار در کافه بازار)
@@ -73,9 +73,9 @@ Map<String,dynamic> result = await CafebazaarFlutter.launchPurchaseFlow(
 
 2. `consumption` : if your product is not a subscriber type you must consume it, For product consumption, set the consumption to true
 
-2.1. `consumption` : زمانی که محصول شما از نوع اشتراکی نباشد و از نوع مصرفی می باشد  باید ان را مصرف کنید تا در خرید ها بعدی کاربر بتواند ان را خریداری کند بجت مصرف یک محصول consumption را به صورت true تنظیم کنید
+ `consumption` : زمانی که محصول شما از نوع اشتراکی نباشد و از نوع مصرفی می باشد  باید ان را مصرف کنید تا در خرید ها بعدی کاربر بتواند ان را خریداری کند بجت مصرف یک محصول consumption را به صورت true تنظیم کنید
 
-3.`payload` : The `developerPayload` String is used to specify any additional arguments that you want Bazaar to send back along with the purchase information.
+4.`payload` : The `developerPayload` String is used to specify any additional arguments that you want Bazaar to send back along with the purchase information.
 
 
 * Result If pay is success
@@ -97,7 +97,7 @@ Map<String,dynamic> result = await CafebazaarFlutter.launchPurchaseFlow(
 ````
 
 
-###To get Purchase details use below code
+### To get Purchase details use below code
 ```dart
 Map<String,dynamic> result = CafebazaarFlutter.getPurchase(sku:"your product sku") // you can find sku(product id) in your application in-app section
 // you get the payment details if you consumption the product result is null
